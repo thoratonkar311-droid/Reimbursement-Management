@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO -->
+  <title>Reimbursement Management System</title>
+  <meta name="description" content="Smart expense reimbursement system with multi-level approvals, OCR receipts, and real-time tracking." />
+  <meta name="keywords" content="reimbursement, expense tracker, approval workflow, finance system" />
+  <meta name="author" content="Your Team" />
+
+  <!-- Favicon -->
+  <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Theme Color -->
+  <meta name="theme-color" content="#0f172a" />
+
+  <!-- Open Graph (for sharing links) -->
+  <meta property="og:title" content="Reimbursement Management System" />
+  <meta property="og:description" content="Manage expenses, approvals, and reimbursements efficiently." />
+  <meta property="og:type" content="website" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: #0f172a;
+      color: #fff;
+    }
+
+    /* Loader */
+    #loader {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      font-size: 20px;
+      letter-spacing: 1px;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #ffffff33;
+      border-top: 4px solid #38bdf8;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 10px;
+    }
+
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Loading Screen -->
+  <div id="loader">
+    <div class="spinner"></div>
+    Loading Reimbursement System...
+  </div>
+
+  <!-- React Root -->
+  <div id="root"></div>
+
+  <script>
+    // Hide loader when React loads
+    window.addEventListener("load", () => {
+      const loader = document.getElementById("loader");
+      if (loader) loader.style.display = "none";
+    });
+  </script>
+</body>
+</html>
