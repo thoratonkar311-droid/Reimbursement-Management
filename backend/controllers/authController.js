@@ -2,28 +2,71 @@ const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+// 🔹 REGISTER (Admin created on signup)
 exports.register = async (req, res) => {
-  const hash = await bcrypt.hash(req.body.password, 10);
+  try {
+    const { name, email, password } = req.body;
 
-  const user = await User.create({
-    ...req.body,
-    password: hash,
-    role: "Admin"
-  });
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ msg: "User already exists" });
+    }
 
-  res.json(user);
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create user (default Admin)
+    const user = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      role: "Admin"
+    });
+
+    res.status(201).json({
+      msg: "User registered successfully",
+      user
+    });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Server error" });
+  }
 };
 
+// 🔹 LOGIN
 exports.login = async (req, res) => {
-  const user = await User.findOne({ email: req.body.email });
+  try {
+    const { email, password } = req.body;
 
-  if (!user) return res.send("User not found");
+    // Check user
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ msg: "User not found" });
+    }
 
-  const valid = await bcrypt.compare(req.body.password, user.password);
+    // Compare password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ msg: "Invalid password" });
+    }
 
-  if (!valid) return res.send("Wrong password");
+    // Generate JWT Token
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
 
-  const token = jwt.sign({ id: user._id, role: user.role }, "secret");
+    res.json({
+      msg: "Login successful",
+      token,
+      user
+    });
 
-  res.json({ token, user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ msg: "Server error" });
+  }
 };
