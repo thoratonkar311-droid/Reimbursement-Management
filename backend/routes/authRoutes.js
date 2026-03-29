@@ -1,7 +1,10 @@
 const router = require("express").Router();
-const { register, login } = require("../controllers/authController");
 
-router.post("/login", login);
-router.post("/register", register);
+// ✅ CORRECT IMPORT
+const authController = require("../controllers/authController");
+
+// ✅ USE FUNCTIONS PROPERLY
+router.post("/login", authController.login);
+router.post("/register", authController.register);
 
 module.exports = router;
